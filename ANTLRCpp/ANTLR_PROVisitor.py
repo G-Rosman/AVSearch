@@ -1,13 +1,34 @@
 # Generated from ANTLR_PRO.g4 by ANTLR 4.13.1
 from antlr4 import *
+import re
 if "." in __name__:
     from .ANTLR_PROParser import ANTLR_PROParser
 else:
     from ANTLR_PROParser import ANTLR_PROParser
 
-# This class defines a complete generic visitor for a parse tree produced by ANTLR_PROParser.
-
 class ANTLR_PROVisitor(ParseTreeVisitor):
+    file_path = ''
+    def add_comment_to_file(self, search_text, comment_text):
+        with open(self.file_path, 'r') as file:
+            content = file.read()
+        search_pattern = ''.join([f'{char}'+ r"\s*\n" for char in re.escape(search_text)])
+
+    # Ищем исходный текст в файле, используя шаблон поиска
+        match = re.search(search_pattern, content)
+        if match:
+            start_pos = match.start()
+            prev_line_start = content.rfind('\n', 0, start_pos)
+            if prev_line_start == -1:
+                prev_line_start = 0
+            new_content = content[:prev_line_start] + comment_text + '\n' + content[prev_line_start:]
+            with open(self.file_path, 'w') as file:
+                file.write(new_content)
+            print(f"Комментарий {comment_text} успешно добавлен в файл.")
+        else:
+            pass
+            #print("Исходный текст не найден в файле.")
+
+
 
     # Visit a parse tree produced by ANTLR_PROParser#translationUnit.
     def visitTranslationUnit(self, ctx:ANTLR_PROParser.TranslationUnitContext):
@@ -246,7 +267,9 @@ class ANTLR_PROVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ANTLR_PROParser#statement.
     def visitStatement(self, ctx:ANTLR_PROParser.StatementContext):
-        return self.visitChildren(ctx)
+        text = ctx.getText()
+        self.visitChildren(ctx)
+        return text
 
 
     # Visit a parse tree produced by ANTLR_PROParser#labeledStatement.
@@ -271,12 +294,36 @@ class ANTLR_PROVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ANTLR_PROParser#selectionStatement.
     def visitSelectionStatement(self, ctx:ANTLR_PROParser.SelectionStatementContext):
+        self.add_comment_to_file(ctx.getText(), '// Блок IF')
+        if ctx.getChildCount() == 5:
+            print(ctx.getChild(0).getText(),end = ' ')
+            print((ctx.getChild(1).getText()),end = ' ')
+            cond = self.visit(ctx.condition())
+            print(cond)
+            print(ctx.getChild(3).getText())
+            statement = self.visit(ctx.statement(0)) 
+            print(statement)
+        if ctx.getChildCount() == 7:
+            print(ctx.getChild(0).getText(),end = ' ')
+            print((ctx.getChild(1).getText()),end = ' ')
+            cond = self.visit(ctx.condition())
+            print(cond,end = ' ')
+            print(ctx.getChild(3).getText(),end = ' ')
+            statement = self.visit(ctx.statement(0)) 
+            print(statement)
+
+            print(ctx.getChild(5).getText(),end = ' ')
+            statement = self.visit(ctx.statement(1)) 
+            print(statement)
+
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ANTLR_PROParser#condition.
     def visitCondition(self, ctx:ANTLR_PROParser.ConditionContext):
-        return self.visitChildren(ctx)
+        text = ctx.getText()
+        self.visitChildren(ctx)
+        return text
 
 
     # Visit a parse tree produced by ANTLR_PROParser#iterationStatement.
@@ -321,7 +368,9 @@ class ANTLR_PROVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ANTLR_PROParser#blockDeclaration.
     def visitBlockDeclaration(self, ctx:ANTLR_PROParser.BlockDeclarationContext):
-        return self.visitChildren(ctx)
+        text = ctx.getText()
+        self.visitChildren(ctx)
+        return text
 
 
     # Visit a parse tree produced by ANTLR_PROParser#aliasDeclaration.

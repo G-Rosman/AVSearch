@@ -19,6 +19,7 @@ def main(arg):
 
     tree = parser.translationUnit()
     visitor = ANTLR_PROVisitor()
+    visitor.file_path = arg
     visitor.visitTranslationUnit(tree)
 
     print("\033[92m" + "Code correct finished \U0001F600" + "\033[0m")
@@ -26,8 +27,9 @@ def main(arg):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        main(sys.argv[1])
+        Code = sys.argv[1]
     else:
         print("No file specified. Using default file 'CodeExample.cpp'.")
-        main("CodeExample.cpp")
-        main("CodeExample1.cpp")
+        Code = "CodeExample1.cpp"
+    
+    main(Code)
