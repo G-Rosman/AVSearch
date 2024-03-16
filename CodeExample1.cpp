@@ -20,10 +20,13 @@ int main()
 	if (icr == x){
 		icr = 10;
 	}
-	else if (icr == y){
-		icr = y;
-	}
-	else if (icr == 3)	icr = 3;
+	else 
+		if (icr == y){
+			icr = y;
+			}
+		else 
+			if (icr == 3)	
+			icr = 3;
 
 
 	_getch();

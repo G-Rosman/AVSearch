@@ -294,14 +294,16 @@ class ANTLR_PROVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ANTLR_PROParser#selectionStatement.
     def visitSelectionStatement(self, ctx:ANTLR_PROParser.SelectionStatementContext):
-        self.add_comment_to_file(ctx.getText(), '// Блок IF')
+        #self.add_comment_to_file(ctx.getText(), '// Блок IF')
         if ctx.getChildCount() == 5:
             print(ctx.getChild(0).getText(),end = ' ')
             print((ctx.getChild(1).getText()),end = ' ')
             cond = self.visit(ctx.condition())
-            print(cond)
-            print(ctx.getChild(3).getText())
+            print(cond, end = ' ')
+            print(ctx.getChild(3).getText(),end = ' ')
             statement = self.visit(ctx.statement(0)) 
+            if "if" in statement[0:3]:
+                print("Вложенный if")
             print(statement)
         if ctx.getChildCount() == 7:
             print(ctx.getChild(0).getText(),end = ' ')
@@ -310,10 +312,14 @@ class ANTLR_PROVisitor(ParseTreeVisitor):
             print(cond,end = ' ')
             print(ctx.getChild(3).getText(),end = ' ')
             statement = self.visit(ctx.statement(0)) 
-            print(statement)
+            if "if" in statement[0:3]:
+                print("Вложенный if")
+            print(statement, end = ' ')
 
             print(ctx.getChild(5).getText(),end = ' ')
             statement = self.visit(ctx.statement(1)) 
+            if "if" in statement[0:3]:
+                print("Вложенный if")
             print(statement)
 
         return self.visitChildren(ctx)
