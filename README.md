@@ -11,3 +11,13 @@ antlr4 -Dlanguage=Python3 YourGrammar.g4
 ```sh
 antlr4 -Dlanguage=Python3 -visitor YourGrammar.g4
 ```
+
+### Увидеть графф токены и их позиции и трассировку
+```sh
+antlr4-parse ANTLR_PRO.g4 translationUnit -tree -gui -tokens -trace CodeExample1.cpp
+```
+
+### Увидеть токены и их позиции 
+```sh
+antlr4-parse ANTLR_PRO.g4 translationUnit -tokens CodeExample1.cpp
+```
